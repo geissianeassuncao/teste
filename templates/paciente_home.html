@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Área do Paciente - ElderLink</title>
+
+<style>
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    background: #eef3f8;
+}
+
+header {
+    background: linear-gradient(90deg, #005bb5, #007ae6);
+    padding: 22px;
+    color: white;
+    font-size: 26px;
+    font-weight: 600;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.container {
+    padding: 35px;
+    display: grid;
+    grid-template-columns: 1.9fr 0.6fr;
+    gap: 30px;
+    min-height: calc(100vh - 90px);
+}
+
+.card {
+    background: white;
+    padding: 28px;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+h2 {
+    color: #005bb5;
+    margin-top: 0;
+    font-weight: 600;
+}
+
+.agendamento-item {
+    background: #f5f8ff;
+    border-left: 5px solid #005bb5;
+    padding: 14px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+/* BARRA LATERAL */
+.card-lateral {
+    background: linear-gradient(180deg, #ffffff, #f0f5ff);
+    border-left: 2px solid #dbe5ff;
+    padding: 25px;
+    border-radius: 0;
+    box-shadow: -3px 0 10px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+/* ATALHOS */
+.atalhos {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+
+.atalho {
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: .2s;
+    border: 1px solid #e4ebff;
+}
+
+.atalho:hover {
+    background: #e8f0ff;
+    transform: scale(1.03);
+}
+
+/* LISTA ESCONDIDA */
+.lista-agendamentos {
+    display: none;
+    margin-top: 15px;
+    overflow-y: auto;
+}
+
+/* RESPONSIVO */
+@media (max-width: 800px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+
+    .card-lateral {
+        border-left: none;
+        border-top: 2px solid #dbe5ff;
+    }
+}
+
+    .texto-saude {
+    font-size: 15.5px;
+    line-height: 1.7;
+    color: #333;
+    text-align: justify;
+}
+
+    .texto-saude p {
+        margin-bottom: 14px;
+        text-indent: 25px;
+    }
+
+    .texto-saude strong {
+        color: #005bb5;
+    }
+
+
+</style>
+
+</head>
+<body>
+
+<header>
+    Bem-vindo, {{ request.user.first_name }}!
+</header>
+
+<div class="container">
+
+<!-- CAMPANHA -->
+<div class="card"> 
+    <h2>📢 Saúde da pessoa idosa</h2>
+
+    <div class="texto-saude">
+
+        <p>
+            O perfil de saúde da população idosa é caracterizado principalmente pela presença de 
+            <strong>doenças crônicas</strong>, problemas de saúde agudos causados por fatores externos 
+            e pelo agravamento de doenças já existentes. Muitos idosos convivem com enfermidades duradouras 
+            e enfrentam riscos de adoecimento súbito, seja por acidentes ou por complicações agudas.
+        </p>
+
+        <p>
+            Apesar dessas condições, destaca-se que nem sempre as doenças crônicas limitam as atividades 
+            diárias, a participação social ou o exercício da cidadania. Em muitos casos, o idoso mantém 
+            autonomia e papel ativo na sociedade, desde que tenha acompanhamento médico e qualidade de vida.
+        </p>
+
+        <p>
+            No contexto internacional, o envelhecimento da população passou a ser discutido de forma ampla 
+            a partir do <strong>Plano Internacional para o Envelhecimento</strong>, promovido pela ONU em 2002, 
+            na cidade de Madri. O objetivo foi estabelecer diretrizes para garantir um envelhecimento digno, 
+            seguro e com direitos assegurados.
+        </p>
+
+        <p>
+            Mais recentemente, em dezembro de 2020, a Assembleia Geral das Nações Unidas instituiu a 
+            <strong>Década do Envelhecimento Saudável (2021–2030)</strong> como estratégia global para promover 
+            o bem-estar dos idosos e construir uma sociedade mais inclusiva para todas as faixas etárias.
+        </p>
+
+    </div>
+
+    <a href="https://www.gov.br/saude/pt-br/assuntos/saude-de-a-a-z/s/saude-da-pessoa-idosa" target="_blank">
+        Saiba mais
+    </a>
+</div>
+
+
+<!-- BARRA LATERAL -->
+<div class="card card-lateral">
+    <h2 >Seus Serviços</h2>
+
+    <div class="atalhos">
+        <div class="atalho" id="btnAgendamentos">🩺 Consultas</div>
+        <div class="atalho">💊 Remédios</div>
+    </div>
+
+    <div class="lista-agendamentos" id="listaAgendamentos">
+
+        {% if agendamentos %}
+            {% for agendamento in agendamentos %}
+                <div class="agendamento-item">
+                    <strong>Médico:</strong> {{ agendamento.medico.user.first_name }}<br>
+                    <strong>Especialidade:</strong> {{ agendamento.medico.especialidade.nome }}<br>
+                    <strong>Data:</strong> {{ agendamento.data }}<br>
+                    <strong>Horário:</strong> {{ agendamento.horario.hora }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+    </div>
+</div>
+
+</div>
+
+<script>
+document.getElementById("btnAgendamentos").addEventListener("click", function () {
+
+    const lista = document.getElementById("listaAgendamentos");
+
+    if (lista.style.display === "block") {
+        lista.style.display = "none";
+    } else {
+        lista.style.display = "block";
+    }
+
+});
+</script>
+
+</body>
+</html>

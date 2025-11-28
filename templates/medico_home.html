@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Médico - ElderLink</title>
+
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    background: #eef3f8;
+}
+
+header {
+    background: linear-gradient(90deg, #005bb5, #007ae6);
+    padding: 20px;
+    color: white;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.container {
+    padding: 30px;
+}
+
+.painel {
+    background: white;
+    padding: 30px;
+    width: 320px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+h1 {
+    color: #005bb5;
+    margin-top: 0;
+    font-size: 22px;
+}
+
+.consultas {
+    margin-top: 16px;
+    background: #005bb5;
+    color: white;
+    padding: 8px 6px 8px 14px;   /* MENOR */
+    border-radius: 6px;
+    font-size: 14px;     /* MENOR */
+    font-weight: 500;
+    width: auto;
+}
+
+
+.consultas:hover {
+    background: #007ae6;
+    transform: scale(1.05);
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    Área do Médico
+</header>
+
+<div class="container">
+    <div class="painel">
+        <h1>Bem-vindo, {{ request.user.first_name }}!</h1>
+
+        <div class="consultas">
+            🩺 Consultas
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
